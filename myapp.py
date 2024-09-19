@@ -106,3 +106,46 @@ st.write('# Shooting Accuracy')
 st.write(f"### Total Shots: {total_shots}")
 st.write(f"### Total Shots on Target: {total_shots_target}")
 st.write(f"### Shooting Accuracy: {average_shooting_accuracy:.2f}%")
+
+
+# Plot comparison of Expected Goals (xG) vs Actual Goals
+st.write("## Expected Goals vs Actual Goals Over Time")
+
+plt.figure(figsize=(10, 5))
+plt.plot(player_df['Date'], player_df['xG'], label='Expected Goals (xG)', marker='o')
+plt.plot(player_df['Date'], player_df['Gls'], label='Actual Goals', marker='x')
+plt.xlabel('Date')
+plt.ylabel('Goals')
+plt.title('Expected Goals vs Actual Goals')
+plt.legend()
+plt.xticks(rotation=45)
+plt.tight_layout()
+
+# Render the plot in the Streamlit app
+st.pyplot(plt)
+
+
+
+import streamlit as st
+import matplotlib.pyplot as plt
+
+# Group by 'Opponent' and sum 'Gls'
+goals_by_opponent = player_df.groupby('Opponent')['Gls'].sum().reset_index()
+
+# Plot
+plt.figure(figsize=(12, 6))  # Increased width for better readability
+plt.bar(goals_by_opponent['Opponent'], goals_by_opponent['Gls'], color='skyblue')
+plt.xlabel('Opponent')
+plt.ylabel('Total Goals')
+plt.title('Total Goals Scored Against Each Opponent')
+
+# Rotate the x-axis labels and adjust alignment
+plt.xticks(rotation=45, ha='right')
+
+# Adjust padding between labels and ticks
+plt.gca().tick_params(axis='x', pad=5)
+
+plt.tight_layout()
+
+# Display the plot in Streamlit
+st.pyplot(plt)
