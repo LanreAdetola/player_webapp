@@ -10,7 +10,7 @@ st.set_page_config(layout="wide")
 # Title of the app
 st.markdown("<h1 style='text-align: center;'> Player Analysis Web App</h1>", unsafe_allow_html=True)
 
-# Define a mapping btw player and csv file path
+# Define a mapping between player and CSV file path
 file_mapping = {
     'Tolu Arokodare': 'tolu_clean.csv',
     'Yira Sor': 'yira_clean.csv'
@@ -21,7 +21,8 @@ st.sidebar.header('Select Features')
 selected_year = st.sidebar.selectbox('Year', list(reversed(range(2023, 2024))))
 selected_player = st.sidebar.selectbox('Player', list(file_mapping.keys()))
 
-if selected_player in file_mapping:
+# Check if a player has been selected
+if selected_player:
     file_path = file_mapping[selected_player]
     player_df = pd.read_csv(file_path)
 
@@ -42,8 +43,6 @@ if selected_player in file_mapping:
     # Title for the data section
     st.markdown(f"<h2 style='text-align: center;'>Player Data for {selected_year}</h2>", unsafe_allow_html=True)
 
-    
-
     # Metrics
     total_minutes = player_df['Min'].sum()
     average_minutes = player_df['Min'].mean()
@@ -57,7 +56,6 @@ if selected_player in file_mapping:
     st.write(f"### Total Goals: {total_goals}")
     st.write(f"### Average Goals per Game: {average_goals:.2f}")
 
-    
     # Performance by Venue
     player_df['Venue'] = pd.to_numeric(player_df['Venue'], errors='coerce')
     player_df['Gls'] = pd.to_numeric(player_df['Gls'], errors='coerce')
@@ -71,7 +69,6 @@ if selected_player in file_mapping:
 
     avg_xg = player_df['xG'].mean()
     st.write(f"### Expected Goals (xG): {avg_xg:.2f} vs Actual Goals (aG): {average_goals:.2f}")
-
 
     # Assists
     total_assists = player_df['Ast'].sum()
@@ -96,7 +93,7 @@ if selected_player in file_mapping:
     st.write(f"### Shooting Accuracy: {average_shooting_accuracy:.2f}%")
 
     # Expected Goals vs Actual Goals Plot
-    st.write("## Expected Goals vs Actual Goals Over Time")
+    st.write("# Expected Goals vs Actual Goals Over Time")
     plt.figure(figsize=(10, 5))
     plt.plot(player_df['Date'], player_df['xG'], label='Expected Goals (xG)', marker='o')
     plt.plot(player_df['Date'], player_df['Gls'], label='Actual Goals', marker='x')
@@ -130,3 +127,5 @@ if selected_player in file_mapping:
         mime='text/csv',
         key='download-csv'
     )
+else:
+    st.write("Please select a player to view their data.")
