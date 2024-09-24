@@ -39,6 +39,7 @@ total_minutes = player_df['Min'].sum()
 average_minutes = player_df['Min'].mean()
 
 # Display total and average minutes
+st.write('# Minutes')
 st.write(f"### Total Minutes Played: {total_minutes}")
 st.write(f"### Average Minutes per Game: {average_minutes:.2f}")
 
