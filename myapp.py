@@ -43,12 +43,16 @@ if selected_player:
     # Title for the data section
     st.markdown(f"<h2 style='text-align: center;'>Player Data for {selected_year}</h2>", unsafe_allow_html=True)
 
-    # Metrics
-    total_minutes = player_df['Min'].sum()
-    average_minutes = player_df['Min'].mean()
-    st.write(f'# Minutes')
-    st.write(f"### Total Minutes Played: {total_minutes}")
-    st.write(f"### Average Minutes per Game: {average_minutes:.2f}")
+# Display the DataFrame
+st.dataframe(player_df)
+
+# Calculate total minutes and average minutes per game
+total_minutes = player_df['Min'].sum()
+average_minutes = player_df['Min'].mean()
+
+# Display total and average minutes
+st.write(f"### Total Minutes Played: {total_minutes}")
+st.write(f"### Average Minutes per Game: {average_minutes:.2f}")
 
     total_goals = player_df['Gls'].sum()
     average_goals = player_df['Gls'].mean()
