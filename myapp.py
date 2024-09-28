@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -7,14 +8,21 @@ import seaborn as sns
 # Set page layout to wide mode
 st.set_page_config(layout="wide")
 
-# Title of the app
+st.markdown("<h1 style='text-align: center;'> Lanre-FC Analytics (Demo) </h1>", unsafe_allow_html=True)
 st.markdown("<h1 style='text-align: center;'> Player Analysis Web App</h1>", unsafe_allow_html=True)
 
-# Define a mapping between player and CSV file path
-file_mapping = {
-    'Tolu Arokodare': 'tolu_clean.csv',
-    'Yira Sor': 'yira_clean.csv'
-}
+
+# Set the folder path (you can change this to any folder where CSVs are stored)
+folder_path = os.getcwd()
+
+# Find and map all CSV files in the folder
+file_mapping = {}
+for file in os.listdir(folder_path):
+    if file.endswith('.csv'):
+        #Remove prefix
+        player_name = file.replace("cleaned_", "").replace(".csv", "")
+        file_mapping[player_name] = os.path.join(folder_path, file)
+
 
 # Sidebar input for user to select year
 st.sidebar.header('Select Features')
@@ -29,10 +37,6 @@ if selected_player:
     # Drop the "Unnamed: 0" column if it exists
     if "Unnamed: 0" in player_df.columns:
         player_df = player_df.drop("Unnamed: 0", axis=1)
-
-    # Reset the index and make it start from 1
-    player_df = player_df.reset_index(drop=True)
-    player_df.index = player_df.index + 1
 
     # Ensure 'Date' column is in datetime format
     player_df['Date'] = pd.to_datetime(player_df['Date'])
